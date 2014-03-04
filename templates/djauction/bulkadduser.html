@@ -1,0 +1,15 @@
+{% extends "djauction/base.html" %}
+{% block content %}
+    <h3>Bulk Import Users</h3>
+    <p>Add users in a .csv file, one user per line, in the following format<br>
+    <b>name,phone,email</b></p>
+    {% for line in status %}
+    <li>{{ line }}</li>
+    {% endfor %}
+    {% if form %}
+    <form action="{% url 'djauction.views.bulk_add_user' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Import"/>
+    </form>
+    {% endif %}
+{% endblock %}

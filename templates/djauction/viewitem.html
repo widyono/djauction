@@ -1,0 +1,60 @@
+{% extends "djauction/base.html" %}
+{% block content %}
+    <h3> {{ item }} </h3>
+	<h4> Dontated by <a href="{% url 'djauction.views.view_user' donor.id auction.id %}">{{donor}}</a></h4>
+	<h3> Details </h3>
+    {% if item.image %}
+        <p><img src="{{ MEDIA_URL }}/{{item.image}}"/></p>
+    {% endif %}
+    Starting Bid: ${{item.starting_bid}}<br>
+    {{item.description}}
+    {% if item.time_and_location %}
+        <h4>Time and Location</h4>
+        <p>{{item.time_and_location}}</p>
+    {% endif %}
+    {% if item.conditions %}
+        <h4>Conditions</h4>
+        <p>{{item.conditions}}</p>
+    {% endif %}
+    {% if bid_del_form %}
+        <h3>Current Bids</h3>
+        <table>
+        <form action="{% url 'djauction.views.view_item' item.id %}" method="post">{% csrf_token %}
+            <tr>
+            {% for field in bid_del_form %}
+                <td>{{field}}</td>
+            {% endfor %}
+            </tr>
+            <tr><td><input type="submit" value="Delete" name="del_bids"/></td></tr>
+        </form>
+        </table>
+    {% endif %}
+    {% if bid_add_form %}
+        <h3>Enter Bids</h3>
+        <table>
+        <form action="{% url 'djauction.views.view_item' item.id %}" method="post">{% csrf_token %}
+            {% for field in bid_add_form %}
+            <tr><td>{{field}}</td></tr>
+            {% endfor %}
+            <tr><td><input type="submit" value="Submit Bids" name="add_bids"/></td></tr>
+        </form>
+        </table>
+    {% endif %}
+    <h3>Add Bid Manually</h3>
+    <table>
+        <form action="{% url 'djauction.views.view_item' item.id %}" method="post">{% csrf_token %}
+            <tr>
+            {% for field in manual_bid_form %}
+                <td>{{field}}</td>
+            {% endfor %}
+            <td><input type="submit" value="Add Bid" name="manual_add_bid"></td>
+            </tr>
+        </form>
+    </table>
+    {% if prev_item %}
+        <a href="{% url 'djauction.views.view_item' prev_item.id %}">Previous ({{ prev_item }})</a><br>
+    {% endif %}
+    {% if next_item %}
+        <a href="{% url 'djauction.views.view_item' next_item.id %}">Next ({{ next_item }})</a><br>
+    {% endif %}
+{% endblock %}

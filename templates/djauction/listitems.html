@@ -1,0 +1,28 @@
+{% extends "djauction/base.html" %}
+{% block content %}
+    {% if del_items %}
+        <b>Warning: This will delete the following items and all bids for them. This can not be undone.</b><br>
+        <form action="{% url 'djauction.views.list_items' auction.id %}" method="post">{% csrf_token %}
+        {% for item in del_items %}
+            <li>{{item}}</li>
+            <input type="hidden" name="del_items" value="{{item.id}}">
+        {% endfor %}
+        <input type="submit" value="Delete" name="delete_confirm">
+        </form>
+        <a href="{% url 'djauction.views.list_items' auction.id %}">Cancel</a>
+    {% else %}
+        <h3>Items</h3>
+        {% if items %}
+            <form action="{% url 'djauction.views.list_items' auction.id %}" method="post">{% csrf_token %}
+            {% for item in items %}
+            <input type="checkbox" name="del_items" value="{{item.id}}">
+            <a href="{% url 'djauction.views.view_item' item.id %}">{{ item }}</a><br>
+            {% endfor %}
+            <input type="submit" value="Delete"><br>
+            </form>
+        {% else %}
+            No items found<br>
+        {% endif %}
+    {% endif %}
+    <p><a href="{% url 'djauction.views.view_auction' auction.id %}">Back To Auction Manager</a></p>
+{% endblock %}

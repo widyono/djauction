@@ -1,0 +1,12 @@
+{% extends "djauction/base.html" %}
+{% block content %}
+    {% if auctions %}
+    <h3>Auctions</h3>
+    {% for auction in auctions %}
+    <li><a href="{% url 'djauction.views.view_auction' auction.id %}">{{ auction }}</a></li>
+    {% empty %}
+    No Auctions Configured<br>
+    {% endfor %}
+    {% endif %}
+    <p><a href="{% url 'djauction.views.add_auction' %}">Add Auction</a></p>
+{% endblock %}

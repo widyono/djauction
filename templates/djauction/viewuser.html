@@ -1,0 +1,41 @@
+{% extends "djauction/base.html" %}
+{% block content %}
+    <h3>{{ auction_user.name }}</h3>
+    {% if auction_user.address_1 %}
+    {{auction_user.address_1}} {{auction_user.address_2}}<br>
+    {% endif %}
+    {% if auction_user.get_state_display %}
+    {{auction_user.get_state_display}} {{auction_user.zip}}<br>
+    {% endif %}
+    {% if auction_user.phone %}
+    {{auction_user.phone}}<br>
+    {% endif %}
+    {% if auction_user.email %}
+    <a href="mailto:{{auction_user.email}}">{{auction_user.email}}</a><br>
+    {% endif %}
+    <h3>Donated Items</h3>
+    {% for item in donated %}
+		<a href="{% url 'djauction.views.view_item' item.id %}">{{item}}</a><br>
+		{% empty %}
+		No items found<br>
+    {% endfor %}
+    {% if auction %}
+		{% if bids %}
+			<h3>Bids</h3>
+            <table>
+			{% for bid in bids %}
+            <tr>
+			<td><a href="{% url 'djauction.views.view_item' bid.item.id %}">{{ bid.item }}</a></td>
+            <td>{{ bid.ammount }}</td>
+            </tr>
+			{% endfor %}
+            </table>
+			Total: {{ owed|default:"0" }}<br>
+		{% endif %}
+		<p><a href="{% url 'djauction.views.add_item' auction.id auction_user.id %}">Add An Item</a></p>
+        <p><a href="{% url 'djauction.views.checkout_user' auction.id auction_user.id %}">Check Out User</a></p>
+		<p><a href="{% url 'djauction.views.view_auction' auction.id %}">Return To Auction Manager</a></p>
+    {% else %}
+		<p><a href="{% url 'djauction.views.index' %}">Return To Index</a></p>
+    {% endif %}
+{% endblock %}

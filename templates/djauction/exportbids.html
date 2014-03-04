@@ -1,0 +1,9 @@
+{% extends "djauction/base.html" %}
+{% block content %}
+    <h3>Export Bids</h3>
+    {% if bids %}
+		{% for bid in bids %}
+		{{bid.bidder.user.name}},{{bid.bidder.user.phone}},{{bid.bidder.user.email}},{{bid.bidder.paddle}},{{bid.item.name}},{{bid.ammount}}<br>
+		{% endfor %}
+    {% endif %}
+{% endblock %}

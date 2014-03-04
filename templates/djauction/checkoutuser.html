@@ -1,0 +1,50 @@
+{% extends "djauction/base.html" %}
+{% block content %}
+    <form method="post" action="{% url 'djauction.views.send_email' auction.id auction_user.id %}">{% csrf_token %}
+    <h3>{{ auction_user }}</h3>
+
+    {% if winning_users %}
+        <h3>Users Who Won Items From {{ auction_user }}</h3>
+        {% for user in winning_users %}
+            <p>
+            <a href="{% url 'djauction.views.view_user' user.id auction.id %}">{{ user }}</a><br>
+            {{user.phone}} <a href="mailto:{{user.email}}">{{user.email}}</a>
+            </p>
+        {% endfor %}
+    {% endif %}
+
+    {% if winning_bids %}
+        <h3>Items Won From {{ auction_user }}</h3>
+        {% for bid in winning_bids %}
+            <input type="hidden" name="winning_bids" value="{{bid.id}}">
+            <li><a href={% url 'djauction.views.view_item' bid.item.id %}>{{ bid.item }}</a></li>
+        {% endfor %}
+    {% endif %}
+
+    {% if won_users %}
+        <h3>Users Who {{ auction_user }} Won Items From</h3>
+        {% for user in won_users %}
+            <p>
+            <a href="{% url 'djauction.views.view_user' user.id auction.id %}">{{ user }}</a><br>
+            {{user.phone}} <a href="mailto:{{user.email}}">{{user.email}}</a>
+            </p>
+        {% endfor %}
+    {% endif %}
+
+    {% if user_bids %}
+        <h3>Items Won</h3>
+        <table>
+        {% for bid in user_bids %}
+            <input type="hidden" name="user_bids" value="{{bid.id}}">
+            <tr>
+            <td><a href="{% url 'djauction.views.view_item' bid.item.id %}">{{bid.item}}</a></td>
+            <td>{{bid.ammount}}</td>
+        {% endfor %}
+        </table>
+        Total: {{ owed|default:"0" }}<br>
+    {% endif %}
+
+    <input type="submit" value="Email Receipt">
+    </form>
+    <p><a href="{% url 'djauction.views.view_user' auction_user.id auction.id %}">Back To User Info</a></p>
+{% endblock %}

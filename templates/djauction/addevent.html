@@ -1,0 +1,8 @@
+{% extends "djauction/base.html" %}
+{% block content %}
+    <form action="." method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+    </form>
+    <p><a href="{% url 'djauction.views.index' %}">Back To Auction Manager</a></p>
+{% endblock %}

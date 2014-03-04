@@ -1,0 +1,11 @@
+{% extends "djauction/base.html" %}
+{% block content %}
+    <h3>Events</h3>
+    {% for event in events %}
+    <li><a href="{% url 'djauction.views.view_event' auction.id event.id %}">{{ event }}</a></li>
+    {% empty %}
+    No Events Configured<br>
+    {% endfor %}
+    <p><a href="{% url 'djauction.views.add_event' auction.id %}">Add Event</a></p>
+    <p><a href="{% url 'djauction.views.view_auction' auction.id %}">Back To Auction Manager</a></p>
+{% endblock %}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/djauction/base.css" />
+<title>
+{% block title %}
+djAuction Auction Manager
+{% endblock %}
+</title>
+</head>
+
+<body>
+<div id="wrapper">
+    <div id="header" align="center">
+    {% block header %}
+    <h1>djAuction Auction Manager</h1>
+    {% endblock %}
+    </div>
+    <div id="left-menu">
+    {% block left_menu %}
+    <h4>Navigation</h4>
+    <a href="{% url 'djauction.views.index' %}">Index</a><br>
+    {% if auction %}
+        <h4>{{ auction }}</h4>
+        <a href="{% url 'djauction.views.list_events' auction.id %}">Manage Events</a><br>
+        <a href="{% url 'djauction.views.list_users' auction.id %}">Manage Users</a><br>
+        <a href="{% url 'djauction.views.list_items' auction.id %}">Manage Items</a><br>
+    {% endif %}
+    <h4>Admin Functions</h4>
+    {% if user.is_authenticated %}
+        {% if user.is_staff %}
+            <a href="/admin">Admin</a><br>
+            <a href="{% url 'djauction.views.add_user' %}">Add Users</a><br>
+            <a href="{% url 'djauction.views.bulk_add_user' %}">Bulk Import Users</a><br>
+            {% if auction %}
+            <a href="{% url 'djauction.views.bulk_add_item' auction.id %}">Bulk Add Items</a><br>
+            <a href="{% url 'djauction.views.export_bids' auction.id %}">Export Bids</a><br>
+            {% endif %}
+        {% endif %}
+        <a href="{% url 'django.contrib.auth.views.logout' %}">Log Out</a>
+    {% else %}
+        <a href="{% url 'django.contrib.auth.views.login' %}">Log In</a>
+    {% endif %}
+    {% endblock %}
+    </div>
+    <div id="content">
+    {% block content %}
+    {% endblock %}
+    </div>
+</div>
+
+</body>
+</html>

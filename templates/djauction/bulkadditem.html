@@ -1,0 +1,15 @@
+{% extends "djauction/base.html" %}
+{% block content %}
+    <h3>Bulk Import Items</h3>
+    <p>Add items in a .csv file, one user per line, in the following format<br>
+    <b>item_name,auction_event,item_number,item_type,donor,valid_winners,starting_bid,time_and_location,conditions</b></p>
+    {% for line in status %}
+    <li>{{ line }}</li>
+    {% endfor %}
+    {% if form %}
+    <form action="{% url 'djauction.views.bulk_add_item' auction.id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Import"/>
+    </form>
+    {% endif %}
+{% endblock %}

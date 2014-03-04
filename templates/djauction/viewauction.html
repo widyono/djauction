@@ -1,0 +1,9 @@
+{% extends "djauction/base.html" %}
+{% block content %}
+    <h3>{{ auction }}</h3>
+    <li><a href="{% url 'djauction.views.list_events' auction.id %}">Manage Events</a></li>
+    <li><a href="{% url 'djauction.views.list_users' auction.id %}">Manage Users</a></li>
+    <li><a href="{% url 'djauction.views.list_items' auction.id %}">Manage Items</a></li>
+    <p>Net Earned: ${{ net_earned }}</p>
+    <p><a href="{% url 'djauction.views.index' %}">Back To Index</a></p>
+{% endblock %}
