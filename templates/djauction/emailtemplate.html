@@ -1,0 +1,40 @@
+Dear {{ auction_user }},<br>
+<br>
+Thank you for joining us at this year's auction! It was great to have you.<br>
+<br>
+
+<!-- If the user won items, render this -->
+{% if user_bids %}
+Here's what you won:<br>
+{% for bid in user_bids %}
+{{ bid.item }} for ${{ bid.ammount }} Donated By {{ bid.item.donor }} {{ bid.item.donor.email }} {{ bid.item.donor.phone }} <br>
+{% if bid.item.time_and_location %}
+Time and Location: {{ bid.item.time_and_location }}<br>
+{% endif %}
+{% if bid.item.conditions %}
+{{ bid.item.conditions }}<br>
+{% endif %}
+{% endfor %}
+<br>
+{% endif %}
+
+<!-- If the winner's donations sold, render this -->
+{% if winning_bids %}
+We're grateful for your donations to the auction, too. Here's how they did<br>
+{% for bid in winning_bids %}
+{{ bid.item }} for {{ bid.ammount }} Won by {{ bid.bidder.user }} {{ bid.bidder.user.email }} {{ bid.bidder.user.phone }}<br>
+{% endfor %}
+<br>
+{% endif %}
+
+<!-- Tell the user if they have paid or not -->
+{% if owed > 0 %}
+{% if paddle.payment_method != 'none' %}
+Our records indicate you have paid for your items won.<br>
+{% else %}
+Our records indicate you have yet to pay for your items. You owe and outstanding balance of {{ owed }}. Please pay at your earliest convenience.<br>
+{% endif %}
+<br>
+{% endif %}
+
+If you have any questions, just let us know. Thank you again for supporting us at the auction!<br>

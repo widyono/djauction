@@ -271,6 +271,7 @@ def checkout_user(request,auction_id,user_id):
     auction_user = AuctionUser.objects.get(id=user_id)
     paddle = AuctionParticipant.objects.get(auction=auction,
         user=auction_user)
+
     # user bids are the bids the user won items with
     user_bids = AuctionBid.objects.filter(auction=auction, bidder=paddle)
     # won users are the users that the current user won items from
@@ -295,9 +296,38 @@ def checkout_user(request,auction_id,user_id):
         'won_users':won_users,
         'winning_users':winning_users,
         'owed':owed,
+        'paddle':paddle,
         })
 
+    if request.method == 'POST':
+        form = ParticipantPaymentForm(request.POST,instance=paddle)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse(checkout_user, args=(auction.id,auction_user.id)))
+        else:
+            c.update({'form':form})
+    else:
+        form = ParticipantPaymentForm(instance=paddle)
+        c.update({'form':form})
+
     return render_to_response('djauction/checkoutuser.html',c,
+        context_instance=RequestContext(request))
+
+@login_required
+def user_paid_view(request,auction_id):
+
+    ''' View to see the status of all users and if they have paid  '''
+
+    c = {}
+
+    auction = Auction.objects.get(id=auction_id)
+    participants = AuctionParticipant.objects.filter(auction__exact=auction_id).order_by('paddle')
+
+    c.update({
+        'auction':auction,
+        'participants':participants})
+
+    return render_to_response('djauction/userpaidview.html',c,
         context_instance=RequestContext(request))
 
 @login_required
@@ -565,12 +595,11 @@ def export_bids(request, auction_id):
 ##### Views For Contacting Users #####
 
 @login_required
-def send_email(request, auction_id, user_id):
+def send_email(request):
 
     ''' View to send reciept email to a user when they check out '''
 
-    ''' TODO: Break the email text out into a template HTML to make it
-        easier to edit '''
+    ''' TODO: Dead code for now, integrate with template output in future '''
 
     if request.method == 'POST':
         auction_user = AuctionUser.objects.get(id=user_id)
@@ -580,37 +609,7 @@ def send_email(request, auction_id, user_id):
         msg['Subject'] = "Reciept from {}".format(str(auction.name))
         msg['From'] = settings.DJAUCTION_SMTP_USER
         msg['To'] = auction_user.email
-
-        msg_text = "Dear {},\n\nThank you for joining us at this year's auction! It was great to have you.\n\n".format(str(auction_user))
-
-        try:
-            if request.POST['user_bids']:
-                bid_list = request.POST.getlist('user_bids')
-                bid_set = AuctionBid.objects.filter(id__in = bid_list)
-                msg_text += "Here's what you won:\n"
-                for bid in bid_set:
-                    msg_text += '{} for ${} Donated By {} {} {}\n'.format(str(bid.item), str(bid.ammount), bid.item.donor, bid.item.donor.email, bid.item.donor.phone)
-                    if bid.item.time_and_location:
-                        msg_text += 'Time and Location: {}\n'.format(str(bid.item.time_and_location))
-                    if bid.item.conditions:
-                        msg_text += '{}\n'.format(str(bid.item.conditions))
-                msg_text += '\n\n'
-        except Exception:
-            pass
-
-        try:
-            if request.POST['winning_bids']:
-                bid_list = request.POST.getlist('winning_bids')
-                bid_set = AuctionBid.objects.filter(id__in = bid_list)
-                msg_text += "We're grateful for your donations to the auction, too. Here's how they did:\n"
-                for bid in bid_set:
-                    msg_text += '{} for ${} Won by {} {} {}\n'.format(str(bid.item), str(bid.ammount), str(bid.bidder.user), bid.bidder.user.email, bid.bidder.user.phone)
-                msg_text += '\n\n'
-        except Exception:
-            pass
-
-        msg_text += "If you have any questions, just let us know. Thank you again for supporting us at the acution!"
-
+        msg_text = ''
         mime_text = MIMEText(msg_text, 'plain')
         msg.attach(mime_text)
 

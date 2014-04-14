@@ -89,3 +89,12 @@ class ImportFileForm(forms.Form):
     ''' Form to import data from a file '''
 
     file = forms.FileField()
+
+class ParticipantPaymentForm(ModelForm):
+
+    ''' Form to add payment information when checking a user out at the end
+        of an auction '''
+
+    class Meta:
+        model = AuctionParticipant
+        exclude = ['auction','user','paddle']

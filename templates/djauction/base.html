@@ -26,6 +26,11 @@ djAuction Auction Manager
         <a href="{% url 'djauction.views.list_events' auction.id %}">Manage Events</a><br>
         <a href="{% url 'djauction.views.list_users' auction.id %}">Manage Users</a><br>
         <a href="{% url 'djauction.views.list_items' auction.id %}">Manage Items</a><br>
+        <a href="{% url 'djauction.views.user_paid_view' auction.id %}">Users Paid</a><br>
+        {% if user.is_staff %}
+        <a href="{% url 'djauction.views.bulk_add_item' auction.id %}">Bulk Add Items</a><br>
+        <a href="{% url 'djauction.views.export_bids' auction.id %}">Export Bids</a><br>
+        {% endif %}
     {% endif %}
     <h4>Admin Functions</h4>
     {% if user.is_authenticated %}
@@ -33,10 +38,6 @@ djAuction Auction Manager
             <a href="/admin">Admin</a><br>
             <a href="{% url 'djauction.views.add_user' %}">Add Users</a><br>
             <a href="{% url 'djauction.views.bulk_add_user' %}">Bulk Import Users</a><br>
-            {% if auction %}
-            <a href="{% url 'djauction.views.bulk_add_item' auction.id %}">Bulk Add Items</a><br>
-            <a href="{% url 'djauction.views.export_bids' auction.id %}">Export Bids</a><br>
-            {% endif %}
         {% endif %}
         <a href="{% url 'django.contrib.auth.views.logout' %}">Log Out</a>
     {% else %}

@@ -13,6 +13,13 @@ ITEM_CHOICES = (
     ('other','Other'),
 )
 
+PAYMENT_CHOICES = (
+    ('none','None'),
+    ('cash','Cash'),
+    ('check','Check'),
+    ('credit','Credit'),
+)
+
 class Auction(models.Model):
 
     ''' Model to represent an Auction '''
@@ -49,6 +56,9 @@ class AuctionParticipant(models.Model):
     auction = models.ForeignKey(Auction)
     user = models.ForeignKey(AuctionUser)
     paddle = models.PositiveIntegerField()
+    payment_method = models.CharField(max_length=10, choices=PAYMENT_CHOICES,
+        default='none')
+    payment_notes = models.TextField(blank=True)
 
     def __unicode__(self):
         return str(self.user) + ' (' + str(self.paddle) + ')'

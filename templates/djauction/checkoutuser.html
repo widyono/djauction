@@ -1,6 +1,5 @@
 {% extends "djauction/base.html" %}
 {% block content %}
-    <form method="post" action="{% url 'djauction.views.send_email' auction.id auction_user.id %}">{% csrf_token %}
     <h3>{{ auction_user }}</h3>
 
     {% if winning_users %}
@@ -16,7 +15,6 @@
     {% if winning_bids %}
         <h3>Items Won From {{ auction_user }}</h3>
         {% for bid in winning_bids %}
-            <input type="hidden" name="winning_bids" value="{{bid.id}}">
             <li><a href={% url 'djauction.views.view_item' bid.item.id %}>{{ bid.item }}</a></li>
         {% endfor %}
     {% endif %}
@@ -35,16 +33,37 @@
         <h3>Items Won</h3>
         <table>
         {% for bid in user_bids %}
-            <input type="hidden" name="user_bids" value="{{bid.id}}">
             <tr>
             <td><a href="{% url 'djauction.views.view_item' bid.item.id %}">{{bid.item}}</a></td>
             <td>{{bid.ammount}}</td>
         {% endfor %}
         </table>
-        Total: {{ owed|default:"0" }}<br>
+        Total Due: {{ owed|default:"0" }}<br>
+        <h3>Update Payment Info</h3>
+        <div style="width:500px;border:6px outset blue;">
+        <form action="." method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Update" />
+        </form>
+        </div>
+
     {% endif %}
 
-    <input type="submit" value="Email Receipt">
+    {% if user.email %}
+    <br>
+    <h3>Email Reciept</h3>
+    <div style="border:6px outset blue;">
+    TO: {{ user.email }} <br>
+    SUBJECT: Auction Reciept from {{ auction.date }} <br>
+    <br>
+    {% include "djauction/emailtemplate.html" %}
+    </div>
+    <!--
+    <form method="post" action="{% url 'djauction.views.send_email' %}">{% csrf_token %}
+        <input type="submit" value="Send Email Receipt">
     </form>
+    -->
+    {% endif %}
+
     <p><a href="{% url 'djauction.views.view_user' auction_user.id auction.id %}">Back To User Info</a></p>
 {% endblock %}
