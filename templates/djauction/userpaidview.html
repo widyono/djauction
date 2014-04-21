@@ -1,15 +1,30 @@
 {% extends "djauction/base.html" %}
 {% block content %}
+    <h3>User Payment View</h3>
     {% if participants %}
     <table border="1">
     <tr><th>Paddle</th><th>User</th><th>Paid?</th></tr>
-    {% for participant in participants %}
+
+    <!-- Naming tuple values as they are read off the list -->
+    {% for paddle,p_id,name,payment,bids in p_data %}
     <tr>
-    <td>{{ participant.paddle }}</td>
-    <td><a href="{% url 'djauction.views.view_user' participant.user.id auction.id %}">{{ participant.user }}</a></td>
-    <td>{{ participant.payment_method }}</td>
+    <td>{{ paddle }}</td>
+    <td><a href="{% url 'djauction.views.view_user' p_id auction.id %}">{{ name }}</a></td>
+
+    <!-- If the user has at least 1 bid but hasn't paid, color the cell red.
+         If the user has at least 1 bid but has paid, color the cell green.
+         If the user has no bids, leave the cell the default color -->
+    {% if bids > 0 %}
+        {% if payment == 'none' %}
+            <td bgcolor="red">
+        {% else %}
+            <td bgcolor="green">
+        {% endif %}
+    {% else %}
+        <td>
+    {% endif %}
+    {{ payment }}</td>
     </tr>
     {% endfor %}
     {% endif %}
-    <p><a href="{% url 'djauction.views.view_auction' auction.id %}">Back To Auction Manager</a></p>
 {% endblock %}

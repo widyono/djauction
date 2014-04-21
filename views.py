@@ -322,10 +322,22 @@ def user_paid_view(request,auction_id):
 
     auction = Auction.objects.get(id=auction_id)
     participants = AuctionParticipant.objects.filter(auction__exact=auction_id).order_by('paddle')
+    p_data = []
+
+    # to get around model/view restrictions, a list of tuples is being used to
+    # move the data out in a non-object context. Variables need to be named inside
+    # iterator on the template
+    for p in participants:
+        p_paddle = int(p.id)
+        p_id = int(p.user.id)
+        p_name = str(p.user.name)
+        p_payment = str(p.payment_method)
+        p_bids = AuctionBid.objects.filter(bidder = p)
+        p_data.append((p_paddle,p_id,p_name,p_payment,len(p_bids)))
 
     c.update({
         'auction':auction,
-        'participants':participants})
+        'p_data':p_data})
 
     return render_to_response('djauction/userpaidview.html',c,
         context_instance=RequestContext(request))
