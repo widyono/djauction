@@ -3,7 +3,7 @@
     <h3>{{ auction_user }}</h3>
 
     {% if winning_users %}
-        <h3>Users Who Won Items From {{ auction_user }}</h3>
+        <h3>Bidders Who Won Items From {{ auction_user }}</h3>
         {% for user in winning_users %}
             <p>
             <a href="{% url 'djauction.views.view_user' user.id auction.id %}">{{ user }}</a><br>
@@ -20,7 +20,7 @@
     {% endif %}
 
     {% if won_users %}
-        <h3>Users Who {{ auction_user }} Won Items From</h3>
+        <h3>Donors Who {{ auction_user }} Won Items From</h3>
         {% for user in won_users %}
             <p>
             <a href="{% url 'djauction.views.view_user' user.id auction.id %}">{{ user }}</a><br>
@@ -65,5 +65,5 @@
     -->
     {% endif %}
 
-    <p><a href="{% url 'djauction.views.view_user' auction_user.id auction.id %}">Back To User Info</a></p>
+    <p><a href="{% url 'djauction.views.view_user' auction_user.id auction.id %}">Back To Bidder Info</a></p>
 {% endblock %}
