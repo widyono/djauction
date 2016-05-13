@@ -132,7 +132,7 @@ def view_event(request, auction_id, event_id):
 
     auction = Auction.objects.get(id=auction_id)
     event = AuctionEvent.objects.get(id=event_id)
-    items = AuctionItem.objects.filter(auction_event=event)
+    items = AuctionItem.objects.filter(auction_event=event).order_by('item_number')
 
     c.update({
         'auction':auction,

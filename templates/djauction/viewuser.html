@@ -33,7 +33,7 @@
 			Total: {{ owed|default:"0" }}<br>
 		{% endif %}
 		<p><a href="{% url 'djauction.views.add_item' auction.id auction_user.id %}">Add An Item</a></p>
-        <p><a href="{% url 'djauction.views.checkout_user' auction.id auction_user.id %}">Check Out Bidder</a></p>
+        <p><a href="{% url 'djauction.views.checkout_user' auction.id auction_user.id %}">Check Out Current Bidder</a></p>
 		<p><a href="{% url 'djauction.views.view_auction' auction.id %}">Return To Auction Manager</a></p>
     {% else %}
 		<p><a href="{% url 'djauction.views.index' %}">Return To Index</a></p>
