@@ -26,7 +26,8 @@ class AuctionParticipantForm(forms.Form):
     ''' Form to create a new Auction Participant (i.e. check a user into
         an auction '''
 
-    name = forms.ModelChoiceField(queryset=AuctionUser.objects.all())
+    name = forms.ModelChoiceField(queryset=AuctionUser.objects.all().order_by('name'),
+            empty_label=None)
     paddle = forms.IntegerField(min_value=0)
 
 class AuctionUserForm(ModelForm):

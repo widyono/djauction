@@ -1,9 +1,9 @@
 {% extends "djauction/base.html" %}
 {% block content %}
-    <h3>User Payment View</h3>
+    <h3>Bidder Payment View</h3>
     {% if p_data %}
     <table border="1">
-    <tr><th>Paddle</th><th>User</th><th>Paid?</th></tr>
+    <tr><th>Paddle</th><th>Bidder</th><th>Paid?</th></tr>
 
     <!-- Naming tuple values as they are read off the list -->
     {% for paddle,p_id,name,payment,bids in p_data %}

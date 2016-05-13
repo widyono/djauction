@@ -422,7 +422,7 @@ def list_items(request,auction_id):
     c = {}
 
     auction = Auction.objects.get(id=auction_id)
-    items = AuctionItem.objects.filter(auction=auction_id)
+    items = AuctionItem.objects.filter(auction=auction_id).order_by('auction_event','item_number','name')
     c.update({
         'auction':auction,
         'items':items

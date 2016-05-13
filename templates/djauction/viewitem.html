@@ -1,7 +1,7 @@
 {% extends "djauction/base.html" %}
 {% block content %}
     <h3> {{ item }} </h3>
-	<h4> Dontated by <a href="{% url 'djauction.views.view_user' donor.id auction.id %}">{{donor}}</a></h4>
+	<h4> Donated by <a href="{% url 'djauction.views.view_user' donor.id auction.id %}">{{donor}}</a></h4>
 	<h3> Details </h3>
     {% if item.image %}
         <p><img src="{{ MEDIA_URL }}/{{item.image}}"/></p>

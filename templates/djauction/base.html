@@ -24,9 +24,9 @@ djAuction Auction Manager
     {% if auction %}
         <h4>{{ auction }}</h4>
         <a href="{% url 'djauction.views.list_events' auction.id %}">Manage Events</a><br>
-        <a href="{% url 'djauction.views.list_users' auction.id %}">Manage Users</a><br>
+        <a href="{% url 'djauction.views.list_users' auction.id %}">Manage Bidders</a><br>
         <a href="{% url 'djauction.views.list_items' auction.id %}">Manage Items</a><br>
-        <a href="{% url 'djauction.views.user_paid_view' auction.id %}">Users Paid</a><br>
+        <a href="{% url 'djauction.views.user_paid_view' auction.id %}">Bidders Paid</a><br>
         {% if user.is_staff %}
         <a href="{% url 'djauction.views.bulk_add_item' auction.id %}">Bulk Add Items</a><br>
         <a href="{% url 'djauction.views.export_bids' auction.id %}">Export Bids</a><br>

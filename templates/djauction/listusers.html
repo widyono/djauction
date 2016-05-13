@@ -6,6 +6,6 @@
     {% empty %}
     No users found<br>
     {% endfor %}
-    <p><a href="{% url 'djauction.views.checkin_user' auction.id %}">Check In A User</a></p>
+    <p><a href="{% url 'djauction.views.checkin_user' auction.id %}">Check In A Bidder</a></p>
     <p><a href="{% url 'djauction.views.view_auction' auction.id %}">Back To Auction Manager</a></p>
 {% endblock %}
