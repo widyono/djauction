@@ -328,7 +328,7 @@ def user_paid_view(request,auction_id):
     # move the data out in a non-object context. Variables need to be named inside
     # iterator on the template
     for p in participants:
-        p_paddle = int(p.id)
+        p_paddle = int(p.paddle)
         p_id = int(p.user.id)
         p_name = str(p.user.name)
         p_payment = str(p.payment_method)
