@@ -80,10 +80,11 @@ class AuctionBidDelForm(forms.Form):
 class AuctionBidExtraForm(ModelForm):
 
     ''' Form to add an extra Bid without enforcing bid maximums '''
-
+    bidder = forms.ModelChoiceField(queryset=AuctionParticipant.objects.order_by('paddle'))
     class Meta:
         model = AuctionBid
-        exclude = ['auction','item']
+        #exclude = ['auction','item']
+        fields = ('bidder', 'ammount')
 
 class ImportFileForm(forms.Form):
 

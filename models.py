@@ -61,7 +61,8 @@ class AuctionParticipant(models.Model):
     payment_notes = models.TextField(blank=True)
 
     def __unicode__(self):
-        return str(self.user) + ' (' + str(self.paddle) + ')'
+        #return str(self.user) + ' (' + str(self.paddle) + ')'
+        return "{:_>4}:  {}".format(self.paddle,self.user)
 
 class AuctionEvent(models.Model):
 
