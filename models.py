@@ -106,4 +106,4 @@ class AuctionBid(models.Model):
     ammount = models.FloatField()
 
     def __unicode__(self):
-        return str(self.bidder) + ' ' + str(self.ammount)
+        return "${:5,.0f} by {}".format(self.ammount, self.bidder)

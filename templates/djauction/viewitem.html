@@ -42,16 +42,17 @@
 
     {% if bid_del_form %}
     <h3>Current Bids (max bids = {{item.valid_winners}})</h3>
-        <table width="100%">
         <form action="{% url 'djauction.views.view_item' item.id %}" method="post">{% csrf_token %}
+        <table width="100%">
+            <tr align="left"><th>Amount, by Paddle #: Bidder</th></tr>
             <tr>
             {% for field in bid_del_form %}
                 <td>{{field}}</td>
             {% endfor %}
             </tr>
             <tr><td><input type="submit" value="Delete" name="del_bids"/></td></tr>
-        </form>
         </table>
+        </form>
     {% endif %}
 
     {% if bid_add_form %}
