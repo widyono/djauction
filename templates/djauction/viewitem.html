@@ -1,24 +1,48 @@
 {% extends "djauction/base.html" %}
 {% block content %}
+
+    <p><a href="{% url 'djauction.views.view_auction' auction.id %}">Back To Auction Manager</a></p>
+
+    <table width="100%">
+        <tr>
+            <td align="left">
+            {% if prev_item %}
+                <a href="{% url 'djauction.views.view_item' prev_item.id %}">Previous ({{ prev_item }})</a>
+            {% endif %}
+            </td>
+            <td align="right">
+            {% if next_item %}
+                <a href="{% url 'djauction.views.view_item' next_item.id %}">Next ({{ next_item }})</a>
+            {% endif %}
+            </td>
+        </tr>
+    </table>
+    <br>
+
     <h3> {{ item }} </h3>
-	<h4> Donated by <a href="{% url 'djauction.views.view_user' donor.id auction.id %}">{{donor}}</a></h4>
-	<h3> Details </h3>
+    Donated by <a href="{% url 'djauction.views.view_user' donor.id auction.id %}">{{donor}}</a><br>
     {% if item.image %}
         <p><img src="{{ MEDIA_URL }}/{{item.image}}"/></p>
     {% endif %}
-    Starting Bid: ${{item.starting_bid}}<br>
-    {{item.description}}
     {% if item.time_and_location %}
-        <h4>Time and Location</h4>
-        <p>{{item.time_and_location}}</p>
+    Description: {{item.description}}<br>
+    {% endif %}
+    {% if item.time_and_location %}
+    Time and Location: {{item.time_and_location}}<br>
     {% endif %}
     {% if item.conditions %}
-        <h4>Conditions</h4>
-        <p>{{item.conditions}}</p>
+    Conditions: {{item.conditions}}<br>
     {% endif %}
+
+    {% if item.starting_bid %}
+    <h4>Starting Bid: ${{item.starting_bid}}</h4>
+    {% else %}
+    <h4>(No starting bid provided)</h4>
+    {% endif %}
+
     {% if bid_del_form %}
-        <h3>Current Bids</h3>
-        <table>
+    <h3>Current Bids (max bids = {{item.valid_winners}})</h3>
+        <table width="100%">
         <form action="{% url 'djauction.views.view_item' item.id %}" method="post">{% csrf_token %}
             <tr>
             {% for field in bid_del_form %}
@@ -29,32 +53,54 @@
         </form>
         </table>
     {% endif %}
+
     {% if bid_add_form %}
-        <h3>Enter Bids</h3>
+        {% if bid_del_form %}
+    <h3>Enter Remaining Bids (up to max total of {{item.valid_winners}} bids)</h3>
+        {% else %}
+    <h3>Enter New Bids (up to max of {{item.valid_winners}} bids)</h3>
+        {% endif %}
         <table>
         <form action="{% url 'djauction.views.view_item' item.id %}" method="post">{% csrf_token %}
             {% for field in bid_add_form %}
-            <tr><td>{{field}}</td></tr>
+            {% cycle 'field_left' 'field_right' as curfield silent %}
+            {% if curfield == "field_left" %}
+            <tr><td>{{field}}</td>
+            {% else %}
+            &nbsp;&nbsp;<td>${{field}}</td></tr>
+            {% endif %}
             {% endfor %}
             <tr><td><input type="submit" value="Submit Bids" name="add_bids"/></td></tr>
         </form>
         </table>
     {% endif %}
-    <h3>Add Bid Manually</h3>
+
+    <h3>Add Bid Manually (overrides max bid limit)</h3>
     <table>
         <form action="{% url 'djauction.views.view_item' item.id %}" method="post">{% csrf_token %}
             <tr>
-            {% for field in manual_bid_form %}
-                <td>{{field}}</td>
-            {% endfor %}
-            <td><input type="submit" value="Add Bid" name="manual_add_bid"></td>
+                <td>{{manual_bid_form.bidder}}</td>&nbsp;&nbsp;<td>${{manual_bid_form.ammount}}</td>
             </tr>
+            <tr><td><input type="submit" value="Add Bid" name="manual_add_bid"></td></tr>
         </form>
     </table>
-    {% if prev_item %}
-        <a href="{% url 'djauction.views.view_item' prev_item.id %}">Previous ({{ prev_item }})</a><br>
-    {% endif %}
-    {% if next_item %}
-        <a href="{% url 'djauction.views.view_item' next_item.id %}">Next ({{ next_item }})</a><br>
-    {% endif %}
+    <br>
+
+    <table width="100%">
+        <tr>
+            <td align="left">
+            {% if prev_item %}
+                <a href="{% url 'djauction.views.view_item' prev_item.id %}">Previous ({{ prev_item }})</a>
+            {% endif %}
+            </td>
+            <td align="right">
+            {% if next_item %}
+                <a href="{% url 'djauction.views.view_item' next_item.id %}">Next ({{ next_item }})</a>
+            {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <p><a href="{% url 'djauction.views.view_auction' auction.id %}">Back To Auction Manager</a></p>
+
 {% endblock %}

@@ -1,5 +1,6 @@
 {% extends "djauction/base.html" %}
 {% block content %}
+    <p><a href="{% url 'djauction.views.view_auction' auction.id %}">Back To Auction Manager</a></p>
     {% if del_items %}
         <b>Warning: This will delete the following items and all bids for them. This can not be undone.</b><br>
         <form action="{% url 'djauction.views.list_items' auction.id %}" method="post">{% csrf_token %}

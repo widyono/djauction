@@ -1,6 +1,8 @@
 {% extends "djauction/base.html" %}
 {% block content %}
-    <h3>Users</h3>
+    <p><a href="{% url 'djauction.views.view_auction' auction.id %}">Back To Auction Manager</a></p>
+    <p><a href="{% url 'djauction.views.checkin_user' auction.id %}">Check In A New Bidder</a></p>
+    <h3>Bidders</h3>
     {% for participant in participants %}
     <a href="{% url 'djauction.views.view_user' participant.user.id auction.id %}">{{ participant.paddle}} {{ participant.user }}</a><br>
     {% empty %}
